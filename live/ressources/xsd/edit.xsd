@@ -14,6 +14,7 @@
                         <xsd:element ref="fue"/>
                         <xsd:element ref="ful"/>
                         <xsd:element ref="maj"/>
+                        <xsd:element ref="cif"/>
                         <xsd:element ref="sup"/>
                         <xsd:element ref="lat"/>
                         <xsd:element ref="zw"/>
