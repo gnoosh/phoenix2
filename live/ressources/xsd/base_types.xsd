@@ -593,6 +593,19 @@
     </xsd:complexType>
   </xsd:element>
   <!-- -->
+  <xsd:element name="cif">
+    <xsd:annotation>
+      <xsd:documentation>Römische Ziffern</xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType mixed="true">
+      <xsd:sequence minOccurs="0">
+        <!-- Kann eine einzelne Abkürzung enthalten -->
+        <xsd:element ref="abr"/>
+        <xsd:element ref="lin"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  
   <xsd:element name="maj">
     <xsd:annotation>
       <xsd:documentation>Majuskeln</xsd:documentation>
