@@ -268,7 +268,7 @@ $(document).ready( function() {
 					}
 					
 					// insert links for facebox-popup (text display)
-					$preset_order_nr = 1;
+					//$preset_order_nr = 1;
 					$results_with_links = array();
 					foreach ($results as $row) {
 						// actions
@@ -294,10 +294,11 @@ $(document).ready( function() {
 						$rd0 = $a_start . $row['rd0'] . $a_end;
 						/* in order to fill the order numbers automatically, the preset_order_nr variable was added (lm:07.06.2016).
 						 EV. TODO: if order numbers should stay once they got edited, some editing is needed */
-						//$results_with_links[] = array('ID' => $row['TextID'], 'Ord.' => '<div style="width:60px;"><input name="order-number-text-'.$row['TextID'].'" class="hybrid textordernumber left" value="'.$order_nr.'" tabindex="'.$tabindex.'" /><a class="icon ok inline right" style="display:none"  title="saved">&nbsp;</a></div>', 'Actions' => $actions, 'CiteID' => $id, 'Date' => $d0, 'Editor' => $rd0);
-						$results_with_links[] = array('ID' => $row['TextID'], 'Ord.' => '<div style="width:60px;"><input name="order-number-text-'.$row['TextID'].'" class="hybrid textordernumber left" value="'.$preset_order_nr.'" tabindex="'.$tabindex.'" /><a class="icon ok inline right" style="display:none"  title="saved">&nbsp;</a></div>', 'Actions' => $actions, 'CiteID' => $id, 'Date' => $d0, 'Editor' => $rd0);
+						//if ($order_nr == null)
+						$results_with_links[] = array('ID' => $row['TextID'], 'Ord.' => '<div style="width:60px;"><input name="order-number-text-'.$row['TextID'].'" class="hybrid textordernumber left" value="'.$order_nr.'" tabindex="'.$tabindex.'" /><a class="icon ok inline right" style="display:none"  title="saved">&nbsp;</a></div>', 'Actions' => $actions, 'CiteID' => $id, 'Date' => $d0, 'Editor' => $rd0);
+						//$results_with_links[] = array('ID' => $row['TextID'], 'Ord.' => '<div style="width:60px;"><input name="order-number-text-'.$row['TextID'].'" class="hybrid textordernumber left" value="'.$preset_order_nr.'" tabindex="'.$tabindex.'" /><a class="icon ok inline right" style="display:none"  title="saved">&nbsp;</a></div>', 'Actions' => $actions, 'CiteID' => $id, 'Date' => $d0, 'Editor' => $rd0);
 						$tabindex++;
-						$preset_order_nr++;
+						//$preset_order_nr++;
 					}
 					// print the html
 					$transformer = new ResultSetTransformer($results_with_links);
