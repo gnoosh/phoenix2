@@ -122,15 +122,16 @@ var GraphTab = {
 			var chosen_graph_name_or_id = null;
 			var chosen_descr = null;
 			choose_existing_graph_button.attr('disabled', 'disabled');
-			$('#existing_graph_field').hide();
 			$('#new_graph_field').fadeIn();
+			$('#new_graphgroup_field').fadeIn();
 		});
 
 		cancel_existing_graph_button.click( function(e) {
 			e.preventDefault();
+			chosen_graph_name_or_id = null;
 			$('#new_graph_field').fadeOut();
 			$('#existing_graphgroup_field').fadeOut();
-			chosen_graph_name_or_id = null;
+			$('#new_graphgroup_field').fadeOut();
 			new_graph_identifier.removeAttr('disabled');
 			graph_description.removeAttr('disabled');
 			new_graph_button.removeAttr('disabled');
@@ -139,11 +140,11 @@ var GraphTab = {
 
 		choose_existing_graphgroup_button.click( function(e) {
 			e.preventDefault();
-			console.log(SelectionIsValid(existing_graphgroup_selector));
-			$('#new_graphgroup_field').fadeOut();
 			chosen_graphgroup_number = existing_graphgroup_selector.val();
 			chosen_graphgroup_name = existing_graphgroup_selector.children('option:selected').text();
+			console.log(SelectionIsValid(existing_graphgroup_selector));
 			console.log("num:", chosen_graphgroup_number, "name:", chosen_graphgroup_name)
+			$('#new_graphgroup_field').fadeOut();
 			new_graphgroup_name.attr('disabled', 'disabled');
 			new_graphgroup_number.attr('disabled', 'disabled');
 			new_graphgroup_button.attr('disabled', 'disabled');
@@ -151,10 +152,11 @@ var GraphTab = {
 
 		new_graphgroup_button.click( function(e) {
 			e.preventDefault();
-			var chosen_graphgroup_number = null;
-			var chosen_graphgroup_name = null;
+			chosen_graphgroup_number = null;
+			chosen_graphgroup_name = null;
 			$('#new_graphgroup_field').fadeIn();
 			choose_existing_graphgroup_button.attr('disabled', 'disabled');
+			new_graphgroup_button.removeAttr('disabled');
 		});
 
 		cancel_existing_graphgroup_button.click( function(e) {
@@ -164,6 +166,7 @@ var GraphTab = {
 			chosen_graphgroup_number = null;
 			new_graphgroup_name.removeAttr('disabled');
 			new_graphgroup_number.removeAttr('disabled');
+			new_graphgroup_button.removeAttr('disabled');
 			choose_existing_graphgroup_button.removeAttr('disabled');
 		});
 
