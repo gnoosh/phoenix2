@@ -44,6 +44,7 @@ var GraphTab = {
 		// var chosen_variant = null;
 
 		// hide the "new" fields
+		$('#existing_graphgroup_field').hide();
 		$('#new_graph_field').hide();
 		$('#new_graphgroup_field').hide();
 
@@ -55,6 +56,7 @@ var GraphTab = {
 			chosen_graphgroup_name = null;
 			$('#new_graph_field').hide();
 			$('#new_graphgroup_field').hide();
+			$('#existing_graphgroup_field').hide();
 			new_graphgroup_button.removeAttr('disabled');
 			new_graph_button.removeAttr('disabled');
 		});
@@ -112,6 +114,7 @@ var GraphTab = {
 			chosen_graph_name_or_id = existing_graph_selector.val();
 			// update the graphgroup selection according to the chosen graph
 			updateGraphgroupSelectionWithID(chosen_graph_name_or_id);
+			$('#existing_graphgroup_field').fadeIn();
 		});
 
 		new_graph_button.click( function(e) {
@@ -119,12 +122,14 @@ var GraphTab = {
 			var chosen_graph_name_or_id = null;
 			var chosen_descr = null;
 			choose_existing_graph_button.attr('disabled', 'disabled');
+			$('#existing_graph_field').hide();
 			$('#new_graph_field').fadeIn();
 		});
 
 		cancel_existing_graph_button.click( function(e) {
 			e.preventDefault();
 			$('#new_graph_field').fadeOut();
+			$('#existing_graphgroup_field').fadeOut();
 			chosen_graph_name_or_id = null;
 			new_graph_identifier.removeAttr('disabled');
 			graph_description.removeAttr('disabled');
@@ -452,7 +457,7 @@ var GraphTab = {
             <div id="left_column" class="w50">
               <div class="inner10">
 
-                <fieldset>
+                <fieldset id="existing_graph_field">
                     <legend class="required">Existing Grapheme</legend>
 
                     <?php echo htmlGraphSelectionDropdown($ps->getActiveProject(), 'graph_id', NULL, 'graph_selector'); ?>
@@ -469,7 +474,7 @@ var GraphTab = {
 
 							<div class="inner10">
 
-                <fieldset>
+                <fieldset id ="existing_graphgroup_field">
                     <legend class="required">Existing Graphgroup</legend>
 
                     <?php echo htmlGraphgroupSelectionDropdown($ps->getActiveProject(), selected_graph ,'graphgroup_id', NULL, 'graphgroup_selector'); ?>
@@ -519,7 +524,7 @@ var GraphTab = {
 								</fieldset>
 
               </div>
-
+							<!-- ASSIGN & RESET buttons -->
 							<input type="button" id="assign_button" class="assign_button" value="ASSIGN" name="assign" title="Press button to create the new Assignment" />
 							<input type="button" id="reset_all_button" class="reset_button" value="RESET" name="assign" title="Press button to reset the form" />
 
