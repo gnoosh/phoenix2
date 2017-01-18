@@ -453,6 +453,7 @@ var GraphTab = {
 
 </script>
 <div class="h300">
+<!-- <div class="min-h100"> -->
     <form id="assign_graph_form" method="post" action="#">
 
         <div id="columns">

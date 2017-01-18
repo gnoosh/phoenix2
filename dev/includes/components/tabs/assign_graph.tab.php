@@ -11,11 +11,11 @@ This is the user interface to formulate searches on occurrences.
 <script type="text/javascript">
 
 var GraphTab = {
-	
+
 	/*#TODO: By now, an occurrence can be assigned to multiple Graphgroups of a Grapheme, which shouldn't be possible in the final release */
-	
+
 	GraphAssigner : function (occ_selection_box) {
-		
+
 		// define targets
 		var graph_selector = $("#select_graph");
 		var graphgroup_selector = $("#select_graphgroup");
@@ -24,10 +24,10 @@ var GraphTab = {
 		var ok_button = $('#ok_button');
 		var cancel_button = $('#cancel_button');
 		var occ_selection_box = occ_selection_box
-		
+
 		var graph_status = 'existing';
 		var graphgroup_status = 'empty';
-		
+
 		// focus behaviour
 		graphDescriptionField.bind('focusout', function() {
 			graphgroup_selector.next().focus();
@@ -35,7 +35,7 @@ var GraphTab = {
 		graphVariantField.bind('focusout', function() {
 			ok_button.focus();
 		});
-		
+
 		function setGraphDescription( variant_name ) {
 			// triggers the field field for the graphgroup variant
 			// the field will be updated and disabled
@@ -46,7 +46,7 @@ var GraphTab = {
 			$('#graph_existing').show();
 			graphgroup_selector.next('input').focus();
 		}
-		
+
 		function clearGraphDescription ( ) {
 			// triggers the field field for the graph description
 			// the field will be activated and cleared
@@ -57,7 +57,7 @@ var GraphTab = {
 			$('#graph_existing').hide();
 			graphDescriptionField.focus();
 		}
-		
+
 		function setGraphgroupVariant( variant_name ) {
 			// triggers the field field for the graphgroup variant
 			// the field will be updated and disabled
@@ -70,7 +70,7 @@ var GraphTab = {
 			$('#subgroup_invalidvalue').hide();
 			ok_button.focus();
 		}
-		
+
 		function clearGraphgroupVariant ( ) {
 			// triggers the field field for the graphgroup variant
 			// the field will be activated and cleared
@@ -83,7 +83,7 @@ var GraphTab = {
 			$('#subgroup_invalidvalue').hide();
 			graphVariantField.focus();
 		}
-		
+
 		function invalidGraphgroupVariant ( ) {
 			graphgroup_status = 'invalid';
 			graphVariantField.attr("disabled", "disabled");
@@ -94,7 +94,7 @@ var GraphTab = {
 			$('#subgroup_invalidvalue').show();
 			graphgroup_selector.next('input').focus();
 		}
-		
+
 		function resetGraphgroupSelector ( ) {
 			// clear selection
 			graphgroup_selector.html('');
@@ -102,7 +102,7 @@ var GraphTab = {
 			$('input.available_graphgroups').remove();
 			//#TODO: Clear previously selected subgroup
 		}
-		
+
 		$("#select_graph")
 			.combobox()
 			// get value selection event
@@ -112,19 +112,19 @@ var GraphTab = {
 					// use graph_details variable (array)
 				})
 				.success( function(graph_details) {
-					
+
 					resetGraphgroupSelector();
-					
+
 					// get graphgroups and update corresponding combobox
 					$.each(graph_details.graphgroups, function() {
 						var new_graphgroup_item = '<option value="' + this.ID + '">' + this.number + '</option>';
 						graphgroup_selector.append(new_graphgroup_item);
 						graphgroup_selector.parent().append('<input class="available_graphgroups" type="hidden" name="' + this.ID + '" value="' + this.name + '" />');
 					});
-					
+
 					// show/hide description
 					setGraphDescription(graph_details.description);
-					
+
 				});
 			})
 			.trigger("change")
@@ -133,7 +133,7 @@ var GraphTab = {
 				clearGraphDescription();
 				resetGraphgroupSelector();
 			});
-		
+
 		$("#select_graphgroup")
 			.combobox()
 			.addClass('ensureDigitsOnly')
@@ -154,21 +154,21 @@ var GraphTab = {
 			.bind("invalidvalue", function() {
 				invalidGraphgroupVariant();
 			});
-		
+
 		cancel_button.bind("click", function() {
 			$('#assign_button-graph').trigger('click');
 		});
-		
+
 		ok_button.bind("click", function() {
 			var final_graph_id = 0;
 			var final_graphgroup_id = 0;
 			var selected_occurrences = occ_selection_box.getSelected();
-			
+
 			//fix delay
 			if (graph_selector.next().val() != graph_selector.children(':selected').html()) {
 				graph_status = 'new';
 			}
-			
+
 			if (graphgroup_status == 'invalid') {
 				alert ('Invalid graphgroup name.');
 				return false;
@@ -216,7 +216,7 @@ var GraphTab = {
 				} else if (!final_graphgroup_id) {
 						final_graphgroup_id = graphgroup_selector.val();
 				}
-				
+
 				// final assignment
 				var action_url = 'actions/php/ajax.php?action=assignOccurrencesToGraphgroup';
 				//action_url += '&graphgroupID=' + final_graphgroup_id;
@@ -234,7 +234,7 @@ var GraphTab = {
 						},
 						async: true
 					});
-				
+
 				// also make the new Grapheme active in the current session
 				$.get('actions/php/ajax.php?action=setActiveGraphemeID&graphID=' + final_graph_id);
 			}
@@ -246,12 +246,12 @@ var GraphTab = {
 <div style="height:180px;">
     <p>Please select whether to assign a new or existing lemma and/or morphological information to the selected Occurrences:</p>
     <form id="search_occurrences_form" method="post" action="?action=SearchOccurrences&next=<?php echo $_GET['next']; ?>">
-            
+
         <div id="columns">
-        
+
             <div id="left_column" class="w50">
               <div class="inner10">
-            
+
                 <fieldset>
                     <legend class="required">Grapheme</legend>
                     <!--<p>Select an existing Grapheme from the list or create a new Entry by entering a name below:</p>-->
@@ -264,16 +264,16 @@ var GraphTab = {
                     <input name="short_description" id="short_description" type="text" class="text w80" title="Short Desctiption"/>
                     <br />
                 </fieldset>
-                
+
                 <input type="button" id="ok_button" class="button" value="Assign to selected Occurrences" name="assign" />
                 <input type="button" id="cancel_button" class="button" value="Cancel" name="cancel" />
-            
+
               </div>
             </div>
-            
+
             <div id="right_column" class="w50">
               <div class="inner10">
-            
+
                 <fieldset>
                     <legend>Subgroup</legend>
                     <!--<p>Please select a subgroup of the selected Grapheme. You can create a new subgroup by filling in a new subgroup number. All numbers must be concluded by a point character, e.g. 2.1.</p>-->
@@ -286,12 +286,12 @@ var GraphTab = {
                     <br />
                     <label>Variant:</label>
                     <input name="variant_name" id="variant_name" type="text" class="text w25" title="Variant" />
-                    
+
                 </fieldset>
-              
+
               </div>
             </div>
-            
+
        </div>
     </form>
 </div>
