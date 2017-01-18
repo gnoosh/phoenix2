@@ -123,19 +123,17 @@ function getLemmata ($get, $post) { global $ps;
 }
 
 function updateGraphgroupSelectionWithID ($get, $post) { global $ps;
-	/* returns a dropdown-selection (string, html) containing all graphgroups with the given graphID */
+	/* returns a dropdown-selection (string, html) containing all graphgroups for the given graphID */
 
-	$id = $get['graphID']; // selected graphID
-	$id = (int)$id; //cast into int to ensure correct constructing of the Graph
+	$id = $get['graphID']; 	// selected graphID
+	$id = (int)$id; 				//cast into int to ensure correct constructing of the Graph
 	$selected_graph = new Graph($id);
 	$graphgroups = $selected_graph->getGraphgroups();
 
 	$opts = "";
 	foreach($graphgroups as $gg) {
-		// $name = $gg->getNumber() . " - " . $gg->getName();
 		$name = $gg->getName();
 		$val = $gg->getNumber();
-		// $val = $gg->getID();
 		// concatenate the option line and add it to $opts
 		$opts .= '<option value="' . $val . '">' . $name . '</option>';
 
