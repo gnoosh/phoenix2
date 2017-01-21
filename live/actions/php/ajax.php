@@ -436,6 +436,24 @@ function assignOccurrencesToGraphgroup ($get, $post) { global $ps;
 	echo json_encode($graphgroup_id);
 }
 
+function checkNameValidity ($get, $post) { global $ps;
+	/* function to check if a name is already given in the DB for the provided table */
+	$table = $get['table'];
+	$graphID = $get['graphID'];
+	$name = $get['name'];
+
+	$dao = new Table($table);
+	$dao->select = "Name";
+	$dao->from = $table;
+	$dao->where = "graphID = $graphID";
+
+	if ( $dao != null) {
+		return false;
+	} else {
+		return true; //returns true if no entries were found
+	}
+}
+
 function lemmaExists ($get, $post) { global $ps;
 /* Checks whether a lemma with @param identifier and @param type exists in the database */
 

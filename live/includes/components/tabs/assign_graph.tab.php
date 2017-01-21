@@ -104,7 +104,7 @@ var GraphTab = {
 
 		choose_existing_graph_button.click( function(e) {
 			e.preventDefault();
-			console.log(SelectionIsValid(existing_graph_selector));
+			console.log(selectionIsValid(existing_graph_selector));
 			// TODO: insert validation routine
 			new_graph_identifier.attr('disabled', 'disabled');
 			graph_description.attr('disabled', 'disabled');
@@ -123,14 +123,17 @@ var GraphTab = {
 			choose_existing_graph_button.attr('disabled', 'disabled');
 			$('#new_graph_field').fadeIn();
 			$('#new_graphgroup_field').fadeIn();
+			$('#approved_new_graph').fadeIn();
 		});
 
 		cancel_existing_graph_button.click( function(e) {
 			e.preventDefault();
 			chosen_graph_name_or_id = null;
+			$('#approved_new_graph').fadeOut();
 			$('#new_graph_field').fadeOut();
 			$('#existing_graphgroup_field').fadeOut();
 			$('#new_graphgroup_field').fadeOut();
+			$('#approved_existing_graph').fadeOut();
 			new_graph_identifier.removeAttr('disabled');
 			graph_description.removeAttr('disabled');
 			new_graph_button.removeAttr('disabled');
@@ -141,7 +144,7 @@ var GraphTab = {
 			e.preventDefault();
 			chosen_graphgroup_number = existing_graphgroup_selector.val();
 			chosen_graphgroup_name = existing_graphgroup_selector.children('option:selected').text();
-			console.log(SelectionIsValid(existing_graphgroup_selector));
+			console.log(selectionIsValid(existing_graphgroup_selector));
 			console.log("num:", chosen_graphgroup_number, "name:", chosen_graphgroup_name)
 			$('#new_graphgroup_field').fadeOut();
 			new_graphgroup_name.attr('disabled', 'disabled');
@@ -155,6 +158,7 @@ var GraphTab = {
 			chosen_graphgroup_number = null;
 			chosen_graphgroup_name = null;
 			$('#new_graphgroup_field').fadeIn();
+			$('#approved_new_graphgroup').fadeIn();
 			choose_existing_graphgroup_button.attr('disabled', 'disabled');
 			new_graphgroup_button.removeAttr('disabled');
 		});
@@ -162,6 +166,8 @@ var GraphTab = {
 		cancel_existing_graphgroup_button.click( function(e) {
 			e.preventDefault();
 			$('#new_graphgroup_field').fadeOut();
+			$('#approved_new_graphgroup').fadeOut();
+			$('#approved_existing_graphgroup').fadeOut();
 			chosen_graphgroup_name = null;
 			chosen_graphgroup_number = null;
 			new_graphgroup_name.removeAttr('disabled');
@@ -321,7 +327,24 @@ var GraphTab = {
 			return count;
 		}
 
-		function SelectionIsValid ( selector ) {
+		function checkNameValidity ( table_name, graph_id, name ) {
+			var val = false;
+			$.ajax({
+				url: 'actions/php/ajax.php?action=checkNameValidity',
+				type: 'POST',
+				dataType: 'json',
+				data: {table: table_name, graphID: graph_id, name: name},
+				success: function(data) {
+					val = data;
+				},
+				error: function(data) {
+					alert('error: ' + JSON.stringify(data));
+				}
+			});
+			return val;
+		}
+
+		function selectionIsValid ( selector ) {
 			selector_value =  selector.val();
 			selector_text = existing_graph_selector.children('option:selected').text();
 			if (selector_value != null && selector_text != null) {
@@ -332,6 +355,8 @@ var GraphTab = {
 		}
 
 		function resetForm () {
+			$('#approved_new_graph').hide();
+			$('#approved_new_graphgroup').hide();
 			$('#existing_graphgroup_field').hide();
 			$('#new_graph_field').hide();
 			$('#new_graphgroup_field').hide();
@@ -346,6 +371,10 @@ var GraphTab = {
 			new_graph_identifier.removeAttr('disabled');
 			graph_description.removeAttr('disabled');
 			choose_existing_graph_button.removeAttr('disabled');
+			new_graph_identifier.val("");
+			graph_description.val("");
+			new_graphgroup_name.val("");
+			new_graphgroup_number.val("");
 
 			//evtl das noch
 			// new_graphgroup_name.removeAttr('disabled');
@@ -372,6 +401,7 @@ var GraphTab = {
                     <legend class="required">
 											Existing Grapheme
 											<img id="approved_existing_graph" src="ressources/icons/001_06.png" style="width: 15px; height: 15px;"/>
+											<img id="approved_new_graph" src="ressources/icons/001_01.png" style="width: 15px; height: 15px;"/>
 										</legend>
 
                     <?php echo htmlGraphSelectionDropdown($ps->getActiveProject(), 'graph_id', NULL, 'graph_selector'); ?>
@@ -392,6 +422,8 @@ var GraphTab = {
                     <legend class="required">
 											Existing Graphgroup
 											<img id="approved_existing_graphgroup" src="ressources/icons/001_06.png" style="width: 15px; height: 15px;"/>
+											<img id="approved_new_graphgroup" src="ressources/icons/001_01.png" style="width: 15px; height: 15px;"/>
+
 										</legend>
 
                     <?php echo htmlGraphgroupSelectionDropdown($ps->getActiveProject(), selected_graph ,'graphgroup_id', NULL, 'graphgroup_selector'); ?>
