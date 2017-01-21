@@ -34,6 +34,7 @@ var GraphTab = {
 		// main buttons (assign & reset)
 		var reset_all_button = $('#reset_all_button');
 		var assign_button = $('#assign_button');
+		var TEST_button = $('#TEST_button');
 
 		// "form elements" to build the components for the final assignment.
 		var chosen_graph_name_or_id = null;
@@ -43,22 +44,19 @@ var GraphTab = {
 		// TODO: include VARIANTS
 		// var chosen_variant = null;
 
+		resetForm();
+
 		// hide the "new" fields
-		$('#existing_graphgroup_field').hide();
-		$('#new_graph_field').hide();
-		$('#new_graphgroup_field').hide();
+		// TODO: make "reset all function -> use it whenever I want"
+
+		TEST_button.click( function(e) {
+			e.preventDefault();
+			console.log("chosen_graph_name_or_id:",chosen_graph_name_or_id, "chosen_descr:", chosen_descr, "chosen_graphgroup_number:", chosen_graphgroup_number, "chosen_graphgroup_name:", chosen_graphgroup_name);
+		});
 
 		reset_all_button.click( function(e) {
 			e.preventDefault();
-			chosen_graph_name_or_id = null;
-			chosen_descr = null;
-			chosen_graphgroup_number = null;
-			chosen_graphgroup_name = null;
-			$('#new_graph_field').hide();
-			$('#new_graphgroup_field').hide();
-			$('#existing_graphgroup_field').hide();
-			new_graphgroup_button.removeAttr('disabled');
-			new_graph_button.removeAttr('disabled');
+			resetForm();
 		});
 
 		assign_button.click( function(e) {
@@ -115,6 +113,7 @@ var GraphTab = {
 			// update the graphgroup selection according to the chosen graph
 			updateGraphgroupSelectionWithID(chosen_graph_name_or_id);
 			$('#existing_graphgroup_field').fadeIn();
+			$('#approved_existing_graph').fadeIn();
 		});
 
 		new_graph_button.click( function(e) {
@@ -148,6 +147,7 @@ var GraphTab = {
 			new_graphgroup_name.attr('disabled', 'disabled');
 			new_graphgroup_number.attr('disabled', 'disabled');
 			new_graphgroup_button.attr('disabled', 'disabled');
+			$('#approved_existing_graphgroup').fadeIn();
 		});
 
 		new_graphgroup_button.click( function(e) {
@@ -170,117 +170,6 @@ var GraphTab = {
 			choose_existing_graphgroup_button.removeAttr('disabled');
 		});
 
-		// $('.existing_graph_button').click( function(e) {
-		// 	console.log("clicked existing:");
-		// 	e.preventDefault();
-		// 	// check if selection is valid
-		// 	if (existingGraphSelectionIsValid()) {
-		// 		console.log("selection is valid");
-		// 		// check if at least one occurrence has been selected
-		// 		var selected_occurrences = occ_selection_box.getSelected();
-		// 		console.log("selected:", selected_occurrences);
-		// 		if (selected_occurrences != '[]') {
-		// 			var countAssignedOccurrences = countExistingGraphAssignments(selected_occurrences)
-		// 			console.log("assigned_count:", countAssignedOccurrences);
-		// 			if ( countAssignedOccurrences > 0) {
-		// 				// display warning if at least one occurrence is already assigned to a Grapheme
-		// 				if (confirm( countAssignedOccurrences + " of the selected Occurrences are already assigned to a Grapheme. Press OK to overwrite their assignments with the selected Grapheme.")) {
-		// 					selected_graph = addOccurrencesToGraph(existing_graph_selector.val(), selected_occurrences);
-		// 					console.log("selected graph:", selected_graph);
-		// 				}
-		// 			} else {
-		// 				selected_graph = addOccurrencesToGraph( existing_graph_selector.val(), selected_occurrences);
-		// 			}
-		// 		} else {
-		// 			alert('Please select at least one occurrence.');
-		// 		}
-		// 	} else {
-		// 		alert('The grapheme you selected does not exist. Please select an existing grapheme from the list or create a new grapheme by using the «New Grapheme» form.');
-		// 	}
-		// });
-
-
-		// $('.new_graph_button').click( function(e) {
-		// 	console.log("click!");
-		// 	e.preventDefault();
-		// 	var graph_description_value = graph_description.val();
-		// 	// check if at least one occurrence has been selected
-		// 	var selected_occurrences = occ_selection_box.getSelected();
-		// 	if (selected_occurrences != '[]') {
-		// 		// check if the lemma already exists
-		// 		var new_graph_identifier_value = new_graph_identifier.val();
-		// 		if (graphExists(new_graph_identifier_value)) {
-		// 			alert('A graph with the given identifier already exists. Please select another identifier.');
-		// 		} else {
-		// 			var countAssignedOccurrences = countExistingGraphAssignments(selected_occurrences)
-		// 			console.log("count:", countAssignedOccurrences);
-		// 			if ( countAssignedOccurrences > 0) {
-		// 				// display warning if at least one occurrence is already assigned to a Lemma
-		// 				if (confirm( countAssignedOccurrences + " of the selected Occurrences are already assigned to a Grapheme. Press OK to overwrite their assignments with the selected Grapheme.")) {
-		// 					// create new lemma and add selected occurrences
-		// 					selected_graph = addOccurrencesToGraph(new_graph_identifier_value, selected_occurrences, graph_description_value);
-		// 					console.log("selected graph", selected_graph);
-		// 					resetNewGraphForm();
-		// 				}
-		// 			} else {
-		// 				console.log("no preselected graphs chosen");
-		// 				console.log("graph descr:", graph_description_value);
-		// 				selected_graph = addOccurrencesToGraph(new_graph_identifier_value, graph_description_value, selected_occurrences);
-		// 				resetNewGraphForm();
-		// 			}
-		// 		}
-		// 	} else {
-		// 		alert('Please select at least one occurrence.');
-		// 	}
-		// });
-
-		// $('.new_graphgroup_button').click( function(e) {
-		// 	console.log("click! new GG");
-		// 	e.preventDefault();
-		// 	var selected_occurrences = occ_selection_box.getSelected();
-		// 	var selected_graph = existing_graph_selector.val();
-		// 	if (selected_occurrences != '[]') {
-		// 		// check if the lemma already exists
-		// 		var new_graphgroup_name_value = new_graphgroup_name.val();
-		// 		console.log("new GG name: ",new_graphgroup_name_value);
-		// 		if (graphExists(new_graphgroup_name_value)) {
-		// 			alert('A graph with the given identifier already exists. Please select another name.');
-		//
-		// 		} else {
-		// 			var countAssignedOccurrences = countExistingGraphAssignments(selected_occurrences)
-		// 			console.log("count:", countAssignedOccurrences);
-		// 			if ( countAssignedOccurrences > 0) {
-		// 				// display warning if at least one occurrence is already assigned to a Lemma
-		// 				if (confirm( countAssignedOccurrences + " of the selected Occurrences are already assigned to a Grapheme. Press OK to overwrite their assignments with the selected Grapheme.")) {
-		// 					// create new lemma and add selected occurrences
-		//
-		// 					addOccurrencesToGraphgroup(new_graph_identifier_value, selected_occurrences);
-		// 					resetNewGraphForm();
-		// 				}
-		// 			} else {
-		// 				console.log("no preselected graphs chosen");
-		// 				console.log("graph descr:", graph_description_value);
-		// 				addOccurrencesToGraphgroup(new_graph_identifier_value, selected_occurrences);
-		// 				resetNewGraphForm();
-		// 			}
-		// 		}
-		// 	} else {
-		// 		alert('Please select at least one occurrence.');
-		// 	}
-		// });
-
-
-		// activate create new graph button when identifier is not empty
-		// new_graph_identifier.bind( 'input', function() {
-		// 	if ($(this).val() != '' ) {
-		// 		// new_graph_ok_button.removeAttr('disabled');
-		// 		new_graph_ok_button.prop('disabled', false);
-		// 		console.log("hello");
-		// 	} else {
-		// 		// new_graph_ok_button.attr('disabled','disabled');
-		// 		new_graph_ok_button.prop('disabled', 'disabled');
-		// 	}
-		// });
 
 		function lemmaExists ( identifier, concept ) {
 			var exists = null;
@@ -442,10 +331,27 @@ var GraphTab = {
 			}
 		}
 
-		function resetNewGraphForm () {
-			new_graph_identifier.val('');
-			new_graph_identifier.trigger('input');
-			new_graph_identifier.focus();
+		function resetForm () {
+			$('#existing_graphgroup_field').hide();
+			$('#new_graph_field').hide();
+			$('#new_graphgroup_field').hide();
+			$('#approved_existing_graph').hide();
+			$('#approved_existing_graphgroup').hide();
+			chosen_graph_name_or_id = null;
+			chosen_descr = null;
+			chosen_graphgroup_number = null;
+			chosen_graphgroup_name = null;
+			new_graphgroup_button.removeAttr('disabled');
+			new_graph_button.removeAttr('disabled');
+			new_graph_identifier.removeAttr('disabled');
+			graph_description.removeAttr('disabled');
+			choose_existing_graph_button.removeAttr('disabled');
+
+			//evtl das noch
+			// new_graphgroup_name.removeAttr('disabled');
+			// new_graphgroup_number.removeAttr('disabled');
+			// new_graphgroup_button.removeAttr('disabled');
+			// choose_existing_graphgroup_button.removeAttr('disabled');
 		}
 
 	}
@@ -462,7 +368,11 @@ var GraphTab = {
               <div class="inner10">
 
                 <fieldset id="existing_graph_field">
-                    <legend class="required">Existing Grapheme</legend>
+
+                    <legend class="required">
+											Existing Grapheme
+											<img id="approved_existing_graph" src="ressources/icons/001_06.png" style="width: 15px; height: 15px;"/>
+										</legend>
 
                     <?php echo htmlGraphSelectionDropdown($ps->getActiveProject(), 'graph_id', NULL, 'graph_selector'); ?>
 
@@ -479,7 +389,10 @@ var GraphTab = {
 							<div class="inner10">
 
                 <fieldset id ="existing_graphgroup_field">
-                    <legend class="required">Existing Graphgroup</legend>
+                    <legend class="required">
+											Existing Graphgroup
+											<img id="approved_existing_graphgroup" src="ressources/icons/001_06.png" style="width: 15px; height: 15px;"/>
+										</legend>
 
                     <?php echo htmlGraphgroupSelectionDropdown($ps->getActiveProject(), selected_graph ,'graphgroup_id', NULL, 'graphgroup_selector'); ?>
 
@@ -529,11 +442,14 @@ var GraphTab = {
 
               </div>
 							<!-- ASSIGN & RESET buttons -->
-							<input type="button" id="assign_button" class="assign_button" value="ASSIGN" name="assign" title="Press button to create the new Assignment" />
-							<input type="button" id="reset_all_button" class="reset_button" value="RESET" name="assign" title="Press button to reset the form" />
+							<input type="button" id="assign_button" class="button" value="ASSIGN" name="assign" title="Press button to create the new Assignment" style="display: block; width: 300;" />
+							<input type="button" id="reset_all_button" class="button" value="RESET" name="assign" title="Press button to reset the form" style="display: block; width: 300;" />
+							<input type="button" id="TEST_button" class="button" value="TEST" name="assign" title="Press button to reset the form" style="display: block; width: 300;" />
 
             </div>
 
        </div>
+
     </form>
+
 </div>
