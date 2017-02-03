@@ -6,6 +6,7 @@ This is the user interface to formulate searches on occurrences.
 */
 
 # MOCKUP! This is a mockup prototype.
+# TODO: convert setters into functions.
 
 ?>
 <script type="text/javascript">
@@ -335,6 +336,7 @@ var GraphTab = {
 				dataType: 'json',
 				data: {table: table_name, graphID: graph_id, name: name},
 				success: function(data) {
+					console.log("d:", data);
 					val = data;
 				},
 				error: function(data) {
